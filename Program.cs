@@ -11,11 +11,28 @@ builder.Services.AddControllersWithViews();
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Data Source=graduation.db";
+// Get connection string from appsettings.json or environment variable
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// If not found, try DATABASE_URL environment variable (Render format)
+if (string.IsNullOrEmpty(connectionString))
+{
+    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+    if (!string.IsNullOrEmpty(databaseUrl))
+    {
+        // Convert DATABASE_URL (postgresql://user:password@host:port/dbname) to Npgsql format
+        var uri = new Uri(databaseUrl);
+        connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.Trim('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Require;Trust Server Certificate=true";
+    }
+    else
+    {
+        // Fallback for local development
+        connectionString = "Host=localhost;Port=5432;Database=graduation;Username=postgres;Password=password";
+    }
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseNpgsql(connectionString));
 
 // Add simple session for login
 builder.Services.AddDistributedMemoryCache();
@@ -41,9 +58,10 @@ using (var scope = app.Services.CreateScope())
         {
             Name = "Senior Test",
             NumberOfGuests = 1,
+            PhoneNumber = "01012345678",
             Guests = new List<Guest>
             {
-                new Guest { Name = "Guest Test" }
+                new Guest { Name = "Guest Test", PhoneNumber = "01098765432" }
             }
         };
         db.Seniors.Add(testSenior);

@@ -95,7 +95,7 @@ namespace GraduationQRSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,NumberOfGuests")] Senior senior)
+        public async Task<IActionResult> Create([Bind("Name,NumberOfGuests,PhoneNumber")] Senior senior)
         {
             if (!ModelState.IsValid) return View(senior);
             _context.Seniors.Add(senior);
@@ -112,7 +112,7 @@ namespace GraduationQRSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SeniorId,Name,NumberOfGuests")] Senior senior)
+        public async Task<IActionResult> Edit(int id, [Bind("SeniorId,Name,NumberOfGuests,PhoneNumber")] Senior senior)
         {
             if (id != senior.SeniorId) return NotFound();
             if (!ModelState.IsValid) return View(senior);

@@ -1,20 +1,38 @@
 # GraduationQRSystem
 
-نظام إدارة QR codes لحفل التخرج باستخدام ASP.NET Core MVC و SQLite.
+نظام إدارة QR codes لحفل التخرج باستخدام ASP.NET Core MVC و PostgreSQL.
 
 ## المتطلبات
 
 - .NET 8.0 SDK
-- SQLite (مدمج مع Entity Framework Core)
+- PostgreSQL Database
 
 ## التشغيل المحلي
 
 ```bash
 dotnet restore
+
+# إنشاء وتطبيق migrations للـ PostgreSQL
+dotnet ef migrations add InitPostgres
+dotnet ef database update
+
 dotnet run
 ```
 
 سيعمل التطبيق على `http://localhost:5000`
+
+## Database Migration
+
+### للـ PostgreSQL Setup:
+```bash
+# إنشاء migration جديدة
+dotnet ef migrations add AddPhoneNumberToSeniorAndGuest
+
+# تطبيق الـ migrations
+dotnet ef database update
+```
+
+**ملاحظة**: في Production على Render، الـ migrations تتطبق تلقائياً عند التشغيل.
 
 ## النشر على Render
 
@@ -42,14 +60,26 @@ dotnet run
 
 5. **متغيرات البيئة (Environment Variables)**
    - `PORT`: سيتم تعيينه تلقائياً بواسطة Render
-   - لا حاجة لإضافة متغيرات إضافية
+   - `DATABASE_URL`: PostgreSQL connection string من Render
+   
+6. **إعداد PostgreSQL Database**
+   - في Render، أضف PostgreSQL Database
+   - انسخ الـ DATABASE_URL من Render Dashboard
+   - أضف Environment Variable في Web Service:
+     - Name: `DATABASE_URL`
+     - Value: `postgresql://user:password@host:port/dbname` (من Render)
+   
+   **ملاحظة**: التطبيق يدعم كلا الصيغتين:
+   - URI format: `postgresql://user:password@host:port/dbname`
+   - Key/Value format: `Host=host;Database=dbname;Username=user;Password=password;SSL Mode=Require;Trust Server Certificate=true`
 
 ### ملاحظات مهمة:
 
-- ✅ **SQLite Database**: ملف `graduation.db` سيتم نسخه تلقائياً مع التطبيق
+- ✅ **PostgreSQL Database**: قاعدة بيانات PostgreSQL من Render
 - ✅ **Auto Migrations**: التطبيق سيطبق Migrations تلقائياً عند التشغيل
 - ✅ **Sample Data**: إذا كانت قاعدة البيانات فارغة، سيتم إضافة بيانات تجريبية
 - ✅ **Port Configuration**: التطبيق مُعد للعمل مع PORT الذي يحدده Render
+- ✅ **Phone Numbers**: كل Senior وGuest لديه رقم موبايل مصري
 
 ### البيانات التجريبية:
 

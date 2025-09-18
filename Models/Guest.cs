@@ -12,6 +12,11 @@ namespace GraduationQRSystem.Models
         [StringLength(200)]
         public string Name { get; set; } = string.Empty;
 
+        [Required]
+        [Phone]
+        [RegularExpression(@"^01[0-2,5]{1}[0-9]{8}$", ErrorMessage = "رقم الموبايل لازم يكون مصري صحيح")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
         public bool IsAttended { get; set; }
 
         public DateTime? AttendanceTime { get; set; }

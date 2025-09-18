@@ -14,6 +14,11 @@ namespace GraduationQRSystem.Models
         [Range(0, 1000)]
         public int NumberOfGuests { get; set; }
 
+        [Required]
+        [Phone]
+        [RegularExpression(@"^01[0-2,5]{1}[0-9]{8}$", ErrorMessage = "رقم الموبايل لازم يكون مصري صحيح")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
         [StringLength(500)]
         public string? QrUrl { get; set; }
 

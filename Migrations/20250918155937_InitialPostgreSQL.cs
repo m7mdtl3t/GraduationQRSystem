@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace GraduationQRSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialPostgreSQL : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,11 +16,12 @@ namespace GraduationQRSystem.Migrations
                 name: "Seniors",
                 columns: table => new
                 {
-                    SeniorId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    NumberOfGuests = table.Column<int>(type: "INTEGER", nullable: false),
-                    QrUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true)
+                    SeniorId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    NumberOfGuests = table.Column<int>(type: "integer", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    QrUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,12 +32,13 @@ namespace GraduationQRSystem.Migrations
                 name: "Guests",
                 columns: table => new
                 {
-                    GuestId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    IsAttended = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AttendanceTime = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    SeniorId = table.Column<int>(type: "INTEGER", nullable: false)
+                    GuestId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    IsAttended = table.Column<bool>(type: "boolean", nullable: false),
+                    AttendanceTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    SeniorId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

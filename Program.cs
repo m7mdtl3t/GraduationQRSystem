@@ -65,6 +65,11 @@ app.UseRouting();
 app.UseSession();
 
 app.MapControllerRoute(
+    name: "seniors",
+    pattern: "Seniors",
+    defaults: new { controller = "Seniors", action = "Index" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 

@@ -20,12 +20,28 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="/">Home</a>
-                    </li>
                     @{
                         var username = Context.Session.GetString("Username");
                         var role = Context.Session.GetString("Role");
+                    }
+                    @if (!string.IsNullOrEmpty(username))
+                    {
+                        <li class="nav-item">
+                            @if (role == "Admin")
+                            {
+                                <a class="nav-link text-light" href="/Admin/Home">Home</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-light" href="/User/Home">Home</a>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/Account/Login">Home</a>
+                        </li>
                     }
                     @if (!string.IsNullOrEmpty(username))
                     {

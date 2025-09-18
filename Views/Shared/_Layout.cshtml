@@ -14,7 +14,17 @@
 <body>
     <nav class="navbar navbar-expand-lg su-navbar">
         <div class="container-fluid">
-            <a class="navbar-brand su-brand" href="/">StageUP</a>
+            @{
+                var brandUsername = Context.Session.GetString("Username");
+                var brandRole = Context.Session.GetString("Role");
+                string brandUrl = "/Account/Login";
+                
+                if (!string.IsNullOrEmpty(brandUsername))
+                {
+                    brandUrl = brandRole == "Admin" ? "/Admin/Home" : "/User/Home";
+                }
+            }
+            <a class="navbar-brand su-brand" href="@brandUrl">StageUP</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

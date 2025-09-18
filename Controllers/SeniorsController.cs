@@ -20,6 +20,12 @@ namespace GraduationQRSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
             var seniors = await _context.Seniors.AsNoTracking().ToListAsync();
             return View(seniors);
         }
@@ -140,6 +146,12 @@ namespace GraduationQRSystem.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
             var senior = await _context.Seniors
                 .Include(s => s.Guests)
                 .FirstOrDefaultAsync(s => s.SeniorId == id);

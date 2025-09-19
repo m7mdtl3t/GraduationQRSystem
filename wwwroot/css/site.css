@@ -145,20 +145,34 @@ body{
 
 /* Form enhancements */
 .form-control{
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #333;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #333 !important;
   border-radius:12px;
   padding:0.75rem 1rem;
 }
 .form-control:focus{
-  background: rgba(255, 255, 255, 0.95);
-  color: #000;
-  border-color: var(--su-primary);
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  border-color: var(--su-primary) !important;
   box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
 }
 .form-control::placeholder{
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Guest form specific styling */
+.collapse .form-control,
+#editGuest-* .form-control {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1px solid #ddd !important;
+}
+.collapse .form-control:focus,
+#editGuest-* .form-control:focus {
+  background: #fff !important;
+  color: #000 !important;
+  border-color: var(--su-primary) !important;
 }
 
 /* Navbar enhancements */

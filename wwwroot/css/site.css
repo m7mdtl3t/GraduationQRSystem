@@ -207,3 +207,17 @@ body{
   .su-card{border-radius:24px;}
   .container-xxl{max-width:1400px;}
 }
+
+/* Force Guest Edit inputs to override any other form-control styles */
+form[action*="EditGuest"] .guest-input {
+  background-color: #ffffff !important;  /* أبيض */
+  color: #000000 !important;             /* أسود */
+  font-weight: bold !important;          /* غامق */
+  border: 1px solid #000 !important;     /* بوردر أسود واضح */
+}
+
+form[action*="EditGuest"] .guest-input::placeholder {
+  color: #000000 !important;             /* placeholder أسود */
+  opacity: 1 !important;                 /* يبان كامل */
+  font-weight: bold !important;
+}

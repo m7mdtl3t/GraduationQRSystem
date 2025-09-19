@@ -145,20 +145,20 @@ body{
 
 /* Form enhancements */
 .form-control{
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color:#f1f5f9;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #333;
   border-radius:12px;
   padding:0.75rem 1rem;
 }
 .form-control:focus{
-  background: rgba(255, 255, 255, 0.15);
-  color:#fff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #000;
   border-color: var(--su-primary);
   box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
 }
 .form-control::placeholder{
-  color:rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 /* Navbar enhancements */

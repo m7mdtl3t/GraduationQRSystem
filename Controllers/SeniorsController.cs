@@ -244,10 +244,11 @@ namespace GraduationQRSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddGuest(int seniorId, string name)
+        public async Task<IActionResult> AddGuest(int seniorId, string name, string phoneNumber)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(phoneNumber))
             {
+                TempData["GuestError"] = "Name and phone number are required.";
                 return RedirectToAction(nameof(Details), new { id = seniorId });
             }
 
@@ -264,7 +265,7 @@ namespace GraduationQRSystem.Controllers
                 return RedirectToAction(nameof(Details), new { id = seniorId });
             }
 
-            _context.Guests.Add(new Guest { Name = name.Trim(), SeniorId = seniorId });
+            _context.Guests.Add(new Guest { Name = name.Trim(), PhoneNumber = phoneNumber.Trim(), SeniorId = seniorId });
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = seniorId });
         }
@@ -283,19 +284,20 @@ namespace GraduationQRSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditGuest(int id, string name)
+        public async Task<IActionResult> EditGuest(int id, string name, string phoneNumber)
         {
             var guest = await _context.Guests.FindAsync(id);
             if (guest == null) return NotFound();
             var seniorId = guest.SeniorId;
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(phoneNumber))
             {
                 TempData["GuestEditError"] = "Guest name is required.";
                 return RedirectToAction(nameof(Details), new { id = seniorId });
             }
 
             guest.Name = name.Trim();
+            guest.PhoneNumber = phoneNumber.Trim();
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = seniorId });
         }

@@ -7,6 +7,18 @@
             <div class="alert alert-warning">@TempData["GuestLimit"]</div>
         </div>
     }
+    @if (TempData["GuestError"] != null)
+    {
+        <div class="col-12">
+            <div class="alert alert-danger">@TempData["GuestError"]</div>
+        </div>
+    }
+    @if (TempData["GuestEditError"] != null)
+    {
+        <div class="col-12">
+            <div class="alert alert-danger">@TempData["GuestEditError"]</div>
+        </div>
+    }
     <div class="col-12 col-lg-4">
         <div class="card su-card">
             <div class="card-body text-center">
@@ -90,13 +102,16 @@
                                 </td>
                             </tr>
                             <tr class="collapse" id="editGuest-@g.GuestId">
-                                <td colspan="4">
+                                <td colspan="5">
                                     <form asp-action="EditGuest" method="post" class="row g-2 align-items-center">
                                         <input type="hidden" name="id" value="@g.GuestId" />
-                                        <div class="col-12 col-md-8">
-                                            <input name="name" value="@g.Name" class="form-control" />
+                                        <div class="col-12 col-md-5">
+                                            <input name="name" value="@g.Name" class="form-control" placeholder="Guest name" />
                                         </div>
-                                        <div class="col-12 col-md-4 d-grid d-md-block">
+                                        <div class="col-12 col-md-5">
+                                            <input name="phoneNumber" value="@g.PhoneNumber" class="form-control" placeholder="01xxxxxxxxx" />
+                                        </div>
+                                        <div class="col-12 col-md-2 d-grid d-md-block">
                                             <button type="submit" class="btn btn-success">Save</button>
                                         </div>
                                     </form>
@@ -109,10 +124,13 @@
                 <hr />
                 <form asp-action="AddGuest" method="post" class="row g-2">
                     <input type="hidden" name="seniorId" value="@Model.SeniorId" />
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-5">
                         <input name="name" class="form-control" placeholder="Guest name" />
                     </div>
-                    <div class="col-12 col-md-4 d-grid d-md-block">
+                    <div class="col-12 col-md-5">
+                        <input name="phoneNumber" class="form-control" placeholder="01xxxxxxxxx" />
+                    </div>
+                    <div class="col-12 col-md-2 d-grid d-md-block">
                         <button type="submit" class="btn btn-success">Add Guest</button>
                     </div>
                 </form>

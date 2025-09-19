@@ -8,21 +8,23 @@
           <input type="hidden" asp-for="SeniorId" />
           <div class="mb-3">
             <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
+            <input asp-for="Name" class="form-control senior-input" />
             <span asp-validation-for="Name" class="text-danger"></span>
           </div>
           <div class="mb-3">
             <label asp-for="NumberOfGuests" class="form-label"></label>
-            <input asp-for="NumberOfGuests" class="form-control" />
+            <input asp-for="NumberOfGuests" class="form-control senior-input" />
             <span asp-validation-for="NumberOfGuests" class="text-danger"></span>
           </div>
           <div class="mb-3">
             <label asp-for="PhoneNumber" class="form-label"></label>
-            <input asp-for="PhoneNumber" class="form-control" placeholder="01xxxxxxxxx" />
+            <input asp-for="PhoneNumber" class="form-control senior-input" placeholder="01xxxxxxxxx" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
           </div>
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn senior-btn">
+              <i class="fas fa-user-graduate"></i> Save Senior
+            </button>
             <a class="btn btn-outline-secondary" href="@Url.Action("Details", new { id = Model.SeniorId })">Cancel</a>
           </div>
         </form>

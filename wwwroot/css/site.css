@@ -208,16 +208,95 @@ body{
   .container-xxl{max-width:1400px;}
 }
 
-/* Force Guest Edit inputs to override any other form-control styles */
-form[action*="EditGuest"] .guest-input {
-  background-color: #ffffff !important;  /* أبيض */
-  color: #000000 !important;             /* أسود */
-  font-weight: bold !important;          /* غامق */
-  border: 1px solid #000 !important;     /* بوردر أسود واضح */
+/* Login */
+.login-input {
+  background:#fff;
+  color:#000;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:0.75rem 1rem;
+}
+.login-input::placeholder {
+  color:#000;
+  font-weight:bold;
+  opacity:1;
+}
+.login-btn {
+  background: linear-gradient(135deg, #0c0d25, #60a0f9);
+  color:#fff;
+  font-weight:bold;
+  border:none;
+  border-radius:12px;
+  padding:0.75rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.login-btn i { font-size:16px; }
+.login-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-form[action*="EditGuest"] .guest-input::placeholder {
-  color: #000000 !important;             /* placeholder أسود */
-  opacity: 1 !important;                 /* يبان كامل */
-  font-weight: bold !important;
+/* Guests */
+.guest-input {
+  background:#fff;
+  color:#000;
+  font-weight:bold;
+  border:1px solid #000;
+  border-radius:10px;
+  padding:0.5rem 1rem;
+}
+.guest-input::placeholder {
+  color:#000;
+  opacity:1;
+  font-weight:bold;
+}
+.guest-btn {
+  background: linear-gradient(135deg, #2dd35f, #059669);
+  color:#fff;
+  font-weight:600;
+  border:none;
+  border-radius:10px;
+  padding:0.5rem 1.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.guest-btn i { font-size:16px; }
+.guest-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Seniors */
+.senior-input {
+  background:#f8fafc;
+  color:#111;
+  border:1px solid #ccc;
+  border-radius:8px;
+  padding:0.5rem 1rem;
+}
+.senior-input::placeholder {
+  color:#444;
+  font-style:italic;
+}
+.senior-btn {
+  background: linear-gradient(135deg, #2e4288, #60a0f9);
+  color:#fff;
+  font-weight:bold;
+  border:none;
+  border-radius:8px;
+  padding:0.5rem 1.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.senior-btn i { font-size:16px; }
+.senior-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }

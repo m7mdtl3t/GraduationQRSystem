@@ -145,7 +145,7 @@ body{
 
 /* Form enhancements */
 .form-control{
-  background: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: #333 !important;
   border-radius:12px;

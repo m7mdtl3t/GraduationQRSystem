@@ -162,17 +162,24 @@ body{
 }
 
 /* Guest form specific styling */
-.collapse .form-control,
-#editGuest-* .form-control {
-  background: #fff !important;
-  color: #000 !important;
+.guest-input {
+  background-color: #ffffff !important; /* الخلفية أبيض */
+  color: #000000 !important;            /* الخط أسود */
+  font-weight: bold;                    /* الخط غامق */
   border: 1px solid #ddd !important;
 }
-.collapse .form-control:focus,
-#editGuest-* .form-control:focus {
-  background: #fff !important;
-  color: #000 !important;
+
+.guest-input:focus {
+  background-color: #ffffff !important;
+  color: #000000 !important;
   border-color: var(--su-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+}
+
+.guest-input::placeholder {
+  color: #000000 !important;            /* الخط أسود */
+  opacity: 1;                           /* يخلي اللون يبان كامل مش شفاف */
+  font-weight: bold;
 }
 
 /* Navbar enhancements */

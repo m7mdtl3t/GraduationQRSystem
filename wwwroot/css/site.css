@@ -152,13 +152,13 @@ body{
   padding:0.75rem 1rem;
 }
 .form-control:focus{
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
   color: #000 !important;
   border-color: var(--su-primary) !important;
   box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
 }
 .form-control::placeholder{
-  color: rgba(0, 0, 0, 0.5) !important;
+  color: rgba(77, 77, 77, 0.5) !important;
 }
 
 /* Guest form specific styling */
@@ -177,7 +177,7 @@ body{
 }
 
 .guest-input::placeholder {
-  color: #000000 !important;            /* الخط أسود */
+  color: #5b5959 !important;            /* الخط أسود */
   opacity: 1;                           /* يخلي اللون يبان كامل مش شفاف */
   font-weight: bold;
 }

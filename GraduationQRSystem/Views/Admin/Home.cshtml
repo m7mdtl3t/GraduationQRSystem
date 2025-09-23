@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card su-card">
+            <div class="card-body text-center">
+                <h2 class="card-title">Welcome Admin</h2>
+                <p class="lead">You have admin access to the system.</p>
+                
+                <div class="mt-4">
+                    <a href="/Seniors" class="btn btn-primary me-2">Manage Seniors</a>
+                    <a href="/Account/Logout" class="btn btn-outline-secondary">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

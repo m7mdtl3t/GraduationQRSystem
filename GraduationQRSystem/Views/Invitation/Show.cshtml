@@ -1,0 +1,87 @@
+@model GraduationQRSystem.Models.Senior
+@{
+    Layout = null; // standalone invitation
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Invitation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        html, body {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #000, #1a1a1a);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .invitation-card {
+            background: #111;
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 30px 40px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255,215,0,0.35);
+        }
+        .invitation-card h1, .invitation-card h3 {
+            color: #FFD700;
+            margin: 0 0 10px 0;
+        }
+        .invitation-card h1 { font-size: 2rem; }
+        .invitation-card h3 { font-weight: 400; }
+        .invitation-card hr {
+            border: none;
+            border-top: 1px solid #FFD700;
+            margin: 20px 0;
+            opacity: 0.6;
+        }
+        .invitation-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .invitation-card li {
+            margin: 10px 0;
+            font-size: 1.05rem;
+        }
+        .footer {
+            margin-top: 20px;
+            font-style: italic;
+            color: #FFD700;
+        }
+    </style>
+    <script>
+        // If an organizer logs in from here, we can gently suggest navigating back to details
+        // No blocking behavior needed
+    </script>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#000000" />
+</head>
+<body>
+    <div class="invitation-card">
+        <h1>🎓 You're Invited!</h1>
+        <h3>Dear Guest</h3>
+        <p>Invitation from <b>@Model.Name</b></p>
+        <hr />
+        <ul>
+            <li>🗓 Thursday, Sept 25, 2025</li>
+            <li>🕖 7:00 PM sharp</li>
+            <li>📍 Cemex Assiut</li>
+        </ul>
+        <p class="footer">We can’t wait to celebrate with you!</p>
+    </div>
+</body>
+</html>
+
+

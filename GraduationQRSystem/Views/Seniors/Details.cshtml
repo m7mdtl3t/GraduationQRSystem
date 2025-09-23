@@ -1,0 +1,146 @@
+@model GraduationQRSystem.Models.Senior
+
+<div class="row g-4">
+    @if (TempData["GuestLimit"] != null)
+    {
+        <div class="col-12">
+            <div class="alert alert-warning">@TempData["GuestLimit"]</div>
+        </div>
+    }
+    @if (TempData["GuestError"] != null)
+    {
+        <div class="col-12">
+            <div class="alert alert-danger">@TempData["GuestError"]</div>
+        </div>
+    }
+    @if (TempData["GuestEditError"] != null)
+    {
+        <div class="col-12">
+            <div class="alert alert-danger">@TempData["GuestEditError"]</div>
+        </div>
+    }
+    <div class="col-12 col-lg-4">
+        <div class="card su-card">
+            <div class="card-body text-center">
+                <h4 class="card-title">@Model.Name</h4>
+                <p class="text-muted mb-1">Guests allowed: @Model.NumberOfGuests</p>
+                <p class="text-muted mb-2">Phone: @Model.PhoneNumber</p>
+                <div class="mb-3">
+                    <div class="su-qr">
+                        <img class="img-fluid" alt="QR" src="@Url.Action("QrImage", new { id = Model.SeniorId })" />
+                    </div>
+                </div>
+                <div class="small text-break">
+                    <a href="@Model.QrUrl" target="_blank">@Model.QrUrl</a>
+                </div>
+                <div class="mt-2">
+                    <a class="btn btn-outline-light btn-sm" href="@Url.Action("QrImage", new { id = Model.SeniorId })" download>Download QR</a>
+                </div>
+                <div class="mt-2">
+                    <a class="btn btn-outline-secondary btn-sm" href="@Url.Action("Index")">Back</a>
+                    <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", new { id = Model.SeniorId })">Edit</a>
+                    <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('Delete this senior?');">
+                        <input type="hidden" name="id" value="@Model.SeniorId" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-8">
+        <div class="card su-card">
+            <div class="card-body">
+                <h5 class="card-title">Guests</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var g in Model.Guests)
+                        {
+                            <tr>
+                                <td>@g.Name</td>
+                                <td>@g.PhoneNumber</td>
+                                <td>
+                                    @if (g.IsAttended)
+                                    {
+                                        <span class="badge bg-success">Attended</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Pending</span>
+                                    }
+                                </td>
+                                <td>@(g.IsAttended ? g.AttendanceTime?.ToLocalTime().ToString("g") : "-")</td>
+                                <td class="text-end">
+                                    @if (!g.IsAttended)
+                                    {
+                                        <form asp-action="MarkAttendance" method="post" class="d-inline">
+                                            <input type="hidden" name="guestId" value="@g.GuestId" />
+                                            <button type="submit" class="btn btn-sm btn-primary">Mark</button>
+                                        </form>
+                                        <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#editGuest-@g.GuestId">Edit</button>
+                                        <form asp-action="DeleteGuest" method="post" class="d-inline" onsubmit="return confirm('Delete this guest?');">
+                                            <input type="hidden" name="id" value="@g.GuestId" />
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="UnmarkAttendance" method="post" class="d-inline">
+                                            <input type="hidden" name="guestId" value="@g.GuestId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-warning">Unmark</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                            <tr class="collapse" id="editGuest-@g.GuestId">
+                                <td colspan="5">
+                                    <form asp-action="EditGuest" method="post" class="row g-2 align-items-center">
+                                        <input type="hidden" name="id" value="@g.GuestId" />
+                                        <div class="col-12 col-md-5">
+                                            <input name="name" value="@g.Name" class="form-control guest-input" placeholder="Guest name" />
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <input name="phoneNumber" value="@g.PhoneNumber" class="form-control guest-input" placeholder="01xxxxxxxxx" />
+                                        </div>
+                                        <div class="col-12 col-md-2 d-grid d-md-block">
+                                            <button type="submit" class="btn guest-btn">
+                                                <i class="fas fa-save"></i> Save
+                                            </button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <form asp-action="AddGuest" method="post" class="row g-2">
+                    <input type="hidden" name="seniorId" value="@Model.SeniorId" />
+                    <div class="col-12 col-md-5">
+                        <input name="name" class="form-control" placeholder="Guest name" />
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <input name="phoneNumber" class="form-control" placeholder="01xxxxxxxxx" />
+                    </div>
+                    <div class="col-12 col-md-2 d-grid d-md-block">
+                        <button type="submit" class="btn guest-btn">
+                            <i class="fas fa-user-plus"></i> Add Guest
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

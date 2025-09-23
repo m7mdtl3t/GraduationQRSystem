@@ -1,0 +1,271 @@
+@model IEnumerable<GraduationQRSystem.Models.Senior>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Seniors</h2>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" href="/Seniors/Index">Refresh</a>
+        <a class="btn btn-primary" href="@Url.Action("Create")">Add Senior</a>
+    </div>
+</div>
+
+<!-- Search Section -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6">
+        <div class="card su-card">
+            <div class="card-body">
+                <h6 class="card-title mb-3">
+                    <i class="fas fa-user-graduate me-2"></i>Search by Senior
+                </h6>
+                <input type="text" id="searchSenior" class="form-control" placeholder="Type senior name..." />
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class="card su-card">
+            <div class="card-body">
+                <h6 class="card-title mb-3">
+                    <i class="fas fa-users me-2"></i>Search by Guest
+                </h6>
+                <input type="text" id="searchGuest" class="form-control" placeholder="Type guest name..." />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div id="searchResults" class="mb-4" style="display: none;">
+    <div class="card su-card">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Search Results</h5>
+            <div id="resultsContent"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Default Seniors Grid -->
+<div id="seniorsGrid" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+@foreach (var s in Model)
+{
+    <div class="col" data-senior-id="@s.SeniorId">
+        <div class="card h-100 su-card">
+            <div class="card-body">
+                <h5 class="card-title">@s.Name</h5>
+                <p class="card-text mb-1"><span class="badge bg-primary su-badge">Guests: @s.NumberOfGuests</span></p>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Details", new { id = s.SeniorId })">Open</a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteSenior(@s.SeniorId, '@s.Name')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchSenior = document.getElementById('searchSenior');
+    const searchGuest = document.getElementById('searchGuest');
+    const searchResults = document.getElementById('searchResults');
+    const resultsContent = document.getElementById('resultsContent');
+    const seniorsGrid = document.getElementById('seniorsGrid');
+    
+    let searchTimeout;
+
+    function performSearch() {
+        const seniorTerm = searchSenior.value.trim();
+        const guestTerm = searchGuest.value.trim();
+
+        if (seniorTerm === '' && guestTerm === '') {
+            searchResults.style.display = 'none';
+            seniorsGrid.style.display = 'block';
+            return;
+        }
+
+        if (seniorTerm !== '') {
+            searchBySenior(seniorTerm);
+        } else if (guestTerm !== '') {
+            searchByGuest(guestTerm);
+        }
+    }
+
+    async function searchBySenior(term) {
+        try {
+            const response = await fetch(`/Seniors/SearchBySenior?term=${encodeURIComponent(term)}`);
+            const seniors = await response.json();
+            
+            displaySeniorResults(seniors);
+        } catch (error) {
+            console.error('Error searching seniors:', error);
+            resultsContent.innerHTML = '<p class="text-danger">Error occurred while searching</p>';
+        }
+    }
+
+    async function searchByGuest(term) {
+        try {
+            const response = await fetch(`/Seniors/SearchByGuest?term=${encodeURIComponent(term)}`);
+            const guests = await response.json();
+            
+            displayGuestResults(guests);
+        } catch (error) {
+            console.error('Error searching guests:', error);
+            resultsContent.innerHTML = '<p class="text-danger">Error occurred while searching</p>';
+        }
+    }
+
+    function displaySeniorResults(seniors) {
+        if (seniors.length === 0) {
+            resultsContent.innerHTML = '<p class="mb-0">No seniors found</p>';
+        } else {
+            let html = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Senior</th><th>Guests</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            
+            seniors.forEach(senior => {
+                const guestList = senior.guests.map(guest => 
+                    `<span class="badge ${guest.isAttended ? 'bg-success' : 'bg-secondary'} me-1 mb-1">${guest.name}</span>`
+                ).join('');
+                
+                const attendedCount = senior.guests.filter(g => g.isAttended).length;
+                const totalCount = senior.guests.length;
+                
+                html += `
+                    <tr>
+                        <td>
+                            <strong>${senior.name}</strong><br>
+                            <small class="text-muted">Max: ${senior.numberOfGuests}</small>
+                        </td>
+                        <td>${guestList || '<span class="text-muted">No guests</span>'}</td>
+                        <td>
+                            <span class="badge bg-info">${attendedCount}/${totalCount} attended</span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="/Seniors/Details/${senior.seniorId}" class="btn btn-sm btn-outline-primary">View</a>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSenior(${senior.seniorId}, '${senior.name}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></div>';
+            resultsContent.innerHTML = html;
+        }
+        
+        searchResults.style.display = 'block';
+        seniorsGrid.style.display = 'none';
+    }
+
+    function displayGuestResults(guests) {
+        if (guests.length === 0) {
+            resultsContent.innerHTML = '<p class="mb-0">No guests found</p>';
+        } else {
+            let html = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Guest</th><th>Senior</th><th>Status</th><th>Attendance Time</th><th>Actions</th></tr></thead><tbody>';
+            
+            guests.forEach(guest => {
+                const statusBadge = guest.isAttended ? 
+                    '<span class="badge bg-success">Attended</span>' : 
+                    '<span class="badge bg-secondary">Pending</span>';
+                
+                const attendanceTime = guest.attendanceTime ? 
+                    new Date(guest.attendanceTime).toLocaleString() : 
+                    '<span class="text-muted">-</span>';
+                
+                html += `
+                    <tr>
+                        <td><strong>${guest.name}</strong></td>
+                        <td>
+                            <span class="badge bg-info">${guest.senior.name}</span><br>
+                            <small class="text-muted">Max: ${guest.senior.numberOfGuests}</small>
+                        </td>
+                        <td>${statusBadge}</td>
+                        <td>${attendanceTime}</td>
+                        <td>
+                            <a href="/Seniors/Details/${guest.senior.seniorId}" class="btn btn-sm btn-outline-primary">View Senior</a>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table></div>';
+            resultsContent.innerHTML = html;
+        }
+        
+        searchResults.style.display = 'block';
+        seniorsGrid.style.display = 'none';
+    }
+
+    // Event listeners with debouncing
+    searchSenior.addEventListener('input', function() {
+        searchGuest.value = ''; // Clear guest search when searching by senior
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    searchGuest.addEventListener('input', function() {
+        searchSenior.value = ''; // Clear senior search when searching by guest
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    // Delete senior function
+    window.deleteSenior = function(seniorId, seniorName) {
+        if (confirm(`Are you sure you want to delete "${seniorName}" and all their guests? This action cannot be undone.`)) {
+            fetch(`/Seniors/Delete/${seniorId}?ajax=true`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the card from the grid
+                    const cardToRemove = document.querySelector(`[data-senior-id="${seniorId}"]`);
+                    if (cardToRemove) {
+                        cardToRemove.remove();
+                    }
+                    
+                    // If we're in search results, refresh the search
+                    if (searchResults.style.display !== 'none') {
+                        performSearch();
+                    }
+                    
+                    // Show success message
+                    showNotification('Senior deleted successfully!', 'success');
+                } else {
+                    showNotification('Error deleting senior. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error deleting senior. Please try again.', 'error');
+            });
+        }
+    };
+
+    // Simple notification function
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 3000);
+    }
+});
+</script>
+}
+
+

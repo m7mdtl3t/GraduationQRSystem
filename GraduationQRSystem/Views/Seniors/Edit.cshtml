@@ -1,0 +1,35 @@
+@model GraduationQRSystem.Models.Senior
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card su-card">
+      <div class="card-body">
+        <h4 class="card-title mb-3">Edit Senior</h4>
+        <form asp-action="Edit" method="post">
+          <input type="hidden" asp-for="SeniorId" />
+          <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control senior-input" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+          </div>
+          <div class="mb-3">
+            <label asp-for="NumberOfGuests" class="form-label"></label>
+            <input asp-for="NumberOfGuests" class="form-control senior-input" />
+            <span asp-validation-for="NumberOfGuests" class="text-danger"></span>
+          </div>
+          <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <input asp-for="PhoneNumber" class="form-control senior-input" placeholder="01xxxxxxxxx" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn senior-btn">
+              <i class="fas fa-user-graduate"></i> Save Senior
+            </button>
+            <a class="btn btn-outline-secondary" href="@Url.Action("Details", new { id = Model.SeniorId })">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
